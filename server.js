@@ -7,7 +7,7 @@ import cors from 'cors'
 
 // app config
 const app = express();
-const port = process.env.PORT || 9000;
+const port = process.env.PORT || //TODO: fill this line with port you want to run;
 
 const pusher = new Pusher({
   appId: "1101620",
@@ -23,7 +23,7 @@ app.use(cors());
 
 // DB config
 const connection_url =
-  "mongodb+srv://<><>:@cluster0.rm2xq.mongodb.net/<>?retryWrites=true&w=majority";
+  "//TODO: fill this line with mongoosedb connection";
 
 mongoose.connect(connection_url, {
   useCreateIndex: true,
