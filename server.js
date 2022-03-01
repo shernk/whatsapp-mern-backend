@@ -1,13 +1,11 @@
-// importing
 import express from "express";
 import mongoose from "mongoose";
 import Messages from "./dbMessage.js";
 import Pusher from "pusher";
-import cors from 'cors'
+import cors from "cors";
 
 // app config
 const app = express();
-const port = process.env.PORT || 9000;
 
 const pusher = new Pusher({
   appId: "1101620",
@@ -22,7 +20,8 @@ app.use(express.json());
 app.use(cors());
 
 // DB config
-const connection_url = "mongodb+srv://whatsapp:mern@cluster0.zsfdy.mongodb.net/whatsapp?retryWrites=true&w=majority";
+const connection_url =
+  "mongodb+srv://whatsapp:mern@cluster0.zsfdy.mongodb.net/whatsapp?retryWrites=true&w=majority";
 
 mongoose.connect(connection_url, {
   useCreateIndex: true,
@@ -38,6 +37,24 @@ db.once("open", () => {
   const changeStream = msgCollection.watch();
 
   changeStream.on("change", (change) => {
+    /* Example when we send a message: 
+    A change occured {
+      _id: {
+        _data: '82621D89CC000000012B022C0100296E5A100453FCDBB74A0248919AF8E937E97AE81846645F69640064621D89A6C5D4DE028C7366530004'
+      },
+      * operationType: 'insert',
+      clusterTime: Timestamp { _bsontype: 'Timestamp', low_: 1, high_: 1646102988 },
+      * fullDocument: {
+        _id: 621d89a6c5d4de028c736653,
+        message: 'see ya',
+        name: 'SherkName',
+        timestamp: 'Live',
+        received: true,
+        __v: 0
+      },
+  */
+    console.log("A change occured", change);
+
     if (change.operationType === "insert") {
       const messageDetails = change.fullDocument;
       pusher.trigger("messages", "inserted", {
@@ -51,8 +68,6 @@ db.once("open", () => {
     }
   });
 });
-
-// ...
 
 // api route
 app.get("/", (req, res) => res.status(200).send("hello world"));
@@ -80,4 +95,5 @@ app.post("/messages/new", (req, res) => {
 });
 
 // listen
+const port = process.env.PORT || 9000;
 app.listen(port, () => console.log(`Listening on localhost:${port}`));
