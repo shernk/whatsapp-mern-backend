@@ -7,7 +7,7 @@ import cors from 'cors'
 
 // app config
 const app = express();
-const port = process.env.PORT || //TODO: fill this line with port you want to run;
+const port = process.env.PORT || 9000;
 
 const pusher = new Pusher({
   appId: "1101620",
@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(cors());
 
 // DB config
-const connection_url = "mongodb+srv://whatsapp:mern@cluster0.zsfdy.mongodb.net/whatsapp?retryWrites=true&w=majority"
+const connection_url = "mongodb+srv://whatsapp:mern@cluster0.zsfdy.mongodb.net/whatsapp?retryWrites=true&w=majority";
 
 mongoose.connect(connection_url, {
   useCreateIndex: true,
